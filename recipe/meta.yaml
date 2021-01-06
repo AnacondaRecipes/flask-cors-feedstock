@@ -1,8 +1,8 @@
 {% set name = "Flask-Cors" %}
-{% set version = "3.0.9" %}
+{% set version = "3.0.10" %}
 {% set bundle = "tar.gz" %}
 {% set hash_type = "sha256" %}
-{% set hash = "6bcfc100288c5d1bcb1dbb854babd59beee622ffd321e444b05f24d6d58466b8" %}
+{% set hash = "b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de" %}
 
 package:
   name: {{ name|lower }}
