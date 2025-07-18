@@ -1,0 +1,24 @@
+From edc4d3110656bc1d1a52b417174cc3bff18930c1 Mon Sep 17 00:00:00 2001
+From: Patryk Kups <pkups@anaconda.com>
+Date: Fri, 18 Jul 2025 18:20:25 +0200
+Subject: [PATCH] fix hardcoded version
+
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 765c5ec..ee4b335 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,6 +1,6 @@
+ [project]
+ name = "flask-cors"
+-version = "0.0.1"
++version = "6.0.1"
+ description = "A Flask extension simplifying CORS support"
+ authors = [{ name = "Cory Dolphin", email = "corydolphin@gmail.com" }]
+ readme = "README.rst"
+-- 
+2.39.5 (Apple Git-154)
+
