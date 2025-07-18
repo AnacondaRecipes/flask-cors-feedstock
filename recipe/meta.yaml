@@ -1,55 +1,60 @@
-{% set name = "Flask-Cors" %}
-{% set version = "3.0.10" %}
-{% set bundle = "tar.gz" %}
-{% set hash_type = "sha256" %}
-{% set hash = "b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de" %}
+{% set name = "flask-cors" %}
+{% set version = "6.0.1" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.{{ bundle }}
-  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.{{ bundle }}
-  {{ hash_type }}: {{ hash }}
+  url: https://github.com/corydolphin/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
+  sha256: 229f273a5dd5ba6095ff162771d182fdc26070efa074fb83d54d4e83d0974405
 
 build:
   number: 0
-  noarch: python
-  script: python -m pip install --no-deps --ignore-installed .
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: True  # [py<39]
 
 requirements:
   host:
     - python
     - pip
-
+    - setuptools
+    - wheel
   run:
     - python
     - flask >=0.9
-    - six
+    - werkzeug >=0.7
 
 test:
+  source_files:
+    - tests
   imports:
     - flask_cors
     - flask_cors.core
     - flask_cors.decorator
     - flask_cors.extension
     - flask_cors.version
+  commands:
+    - pip check
+    - pytest -v tests
+  requires:
+    - pip
+    - pytest >=7.2.0
 
 about:
-  home: https://github.com/corydolphin/flask-cors
+  home: https://corydolphin.github.io/flask-cors
   license: MIT
   license_file: LICENSE
   license_family: MIT
-  summary: 'A Flask extension adding a decorator for CORS support'
+  summary: A Flask extension for handling Cross Origin Resource Sharing (CORS), making cross-origin AJAX possible.
   description: |
-    A Flask extension for handling Cross Origin Resource Sharing (CORS),
-    making cross-origin AJAX possible. This package exposes a Flask extension
-    which by default enables CORS support on all routes, for all origins and
-    methods.
-  doc_url: http://flask-cors.corydolphin.com/en/latest/
+    A Flask extension for handling Cross Origin Resource Sharing (CORS), making cross-origin AJAX possible.
+    This package has a simple philosophy: when you want to enable CORS, you wish to enable it for all use cases on a domain.
+    This means no mucking around with different allowed headers, methods, etc.
+    By default, submission of cookies across domains is disabled due to the security implications.
+    Please see the documentation for how to enable credential’ed requests, and please make sure you add some sort of CSRF protection before doing so!
+  doc_url: https://corydolphin.github.io/flask-cors
   dev_url: https://github.com/corydolphin/flask-cors
-  doc_source_url: https://github.com/corydolphin/flask-cors/blob/master/docs/index.rst
 
 extra:
   recipe-maintainers:
