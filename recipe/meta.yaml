@@ -8,6 +8,8 @@ package:
 source:
   url: https://github.com/corydolphin/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
   sha256: 229f273a5dd5ba6095ff162771d182fdc26070efa074fb83d54d4e83d0974405
+  patches:
+    - patches/0001-fix-hardcoded-version.patch
 
 build:
   number: 0
@@ -15,6 +17,9 @@ build:
   skip: True  # [py<39]
 
 requirements:
+  build:
+    - patch  # [not win]
+    - msys2-patch  # [win]
   host:
     - python
     - pip
@@ -36,6 +41,7 @@ test:
     - flask_cors.version
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; print(version('{{ name|replace('-', '_') }}'))"
     - pytest -v tests
   requires:
     - pip
@@ -59,3 +65,6 @@ about:
 extra:
   recipe-maintainers:
     - pmlandwehr
+  skip-lints:
+    # use newer patcher for win
+    - patch_must_be_in_build
