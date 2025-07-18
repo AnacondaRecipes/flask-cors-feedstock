@@ -9,6 +9,7 @@ source:
   url: https://github.com/corydolphin/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
   sha256: 229f273a5dd5ba6095ff162771d182fdc26070efa074fb83d54d4e83d0974405
   patches:
+    # Please keep checking until the upstream issue is fixed
     - patches/0001-fix-hardcoded-version.patch
 
 build:
