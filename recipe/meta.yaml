@@ -10,37 +10,58 @@ source:
   sha256: 53793e696fce0642b815cd6a07b61b46851207a4c25ba00dc92f2af5a3d79679
 
 build:
-  number: 0
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  number: 1
   skip: true  # [py<39]
 
-requirements:
-  host:
-    - python
-    - pip
-    - setuptools
-    - wheel
-  run:
-    - python
-    - flask >=0.9
-    - werkzeug >=0.7
-    - typing_extensions >=4.6.0  # [py<311]
+outputs:
+  - name: {{ name }}
+    build:
+      script: python -m pip install --no-deps --no-build-isolation --ignore-installed .
+    requirements:
+      host:
+        - python
+        - pip
+        - setuptools
+        - wheel
+      run:
+        - python
+        - flask >=0.9
+        - werkzeug >=0.7
+        - typing_extensions >=4.6.0  # [py<311]
+    test:
+      source_files:
+        - tests
+      imports:
+        - flask_cors
+        - flask_cors.core
+        - flask_cors.decorator
+        - flask_cors.extension
+      commands:
+        - pip check
+        - python -c "from importlib.metadata import version; print(version('{{ name|replace('-', '_') }}'))"
+        - pytest -v tests
+      requires:
+        - pip
+        - pytest >=7.2.0
 
-test:
-  source_files:
-    - tests
-  imports:
-    - flask_cors
-    - flask_cors.core
-    - flask_cors.decorator
-    - flask_cors.extension
-  commands:
-    - pip check
-    - python -c "from importlib.metadata import version; print(version('{{ name|replace('-', '_') }}'))"
-    - pytest -v tests
-  requires:
-    - pip
-    - pytest >=7.2.0
+  - name: flask_cors
+    build:
+    requirements:
+      host:
+        - python
+      run:
+        - python
+        - {{ pin_subpackage(name, exact=True) }}
+    test:
+      imports:
+        - flask_cors
+        - flask_cors.core
+        - flask_cors.decorator
+        - flask_cors.extension
+      requires:
+        - pip
+      commands:
+        - pip check
 
 about:
   home: https://corydolphin.github.io/flask-cors
